@@ -1,0 +1,67 @@
+use assess;
+
+CREATE TABLE q1A
+(
+NORAD_CAT_ID_1 int,
+OBJECT_NAME_1 TEXT,
+DSE_1 DOUBLE,
+NORAD_CAT_ID_2 INT,
+OBJECT_NAME_2 TEXT,
+DSE_2 DOUBLE,
+TCA TEXT,
+TCA_RANGE DOUBLE,
+TCA_RELATIVE_SPEED DOUBLE,
+MAX_PROB DOUBLE,
+DILUTION DOUBLE 
+);
+SELECT* FROM assess.q1A;
+LOAD DATA INFILE 'sort-minRange 1.csv' INTO TABLE assess.q1A 
+FIELDS TERMINATED BY ',' 
+IGNORE 1 LINES;
+
+SELECT * FROM assess.q1A;
+
+--- FINDING TOTAL CONJUCTIONS ( TOP 10)---
+
+SELECT  object_name_1, COUNT(object_name_1) as total_conjunctions_by FROM q1A 
+GROUP BY object_name_1
+ORDER BY COUNT(norad_cat_id_1) DESC
+LIMIT 10;
+
+--- FIRST 25 CONJUNCTIONS SORTED BY  TCA FROM SOONEST TO LATEST---
+
+
+SELECT norad_cat_id_1, object_name_1,norad_cat_id_2,object_name_2,TCA FROM q1A 
+ORDER BY TCA
+LIMIT 25;
+
+
+--- TOP 25 CONJUNCTIONS SORTED  BY MIN TCA RANGE ---
+
+SELECT norad_cat_id_1, object_name_1,norad_cat_id_2,object_name_2,TCA_RANGE,tca FROM q1A 
+ORDER BY TCA_RANGE
+LIMIT 25;
+
+
+--- TOP 20 CONJUNCTIONS SORTED BY  TCA RELATIVE SPEED---
+
+SELECT norad_cat_id_1, object_name_1,norad_cat_id_2,object_name_2,TCA_RANGE,TCA,TCA_RELATIVE_SPEED FROM q1A 
+ORDER BY TCA_RELATIVE_SPEED DESC
+LIMIT 20;
+
+--- TOP 10 ONJUNCTIONS SORTING BY MAX_PROB---
+
+SELECT norad_cat_id_1, object_name_1,norad_cat_id_2,object_name_2,TCA_RANGE,TCA,TCA_RELATIVE_SPEED ,MAX_PROB FROM q1A 
+ORDER BY MAX_PROB DESC 
+LIMIT 10;
+
+
+
+
+SELECT object_name_1,object_name_2,COUNT(*) AS occurences FROM q1A 
+GROUP BY object_name_1,object_name_2
+ORDER BY occurences DESC 
+LIMIT 10 ;
+
+
+
